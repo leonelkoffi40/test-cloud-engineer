@@ -1,0 +1,10 @@
+all:
+  vars:
+  ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+prod:
+  hosts:
+    prod.host:
+      ansible_host: 192.168.11.4
+      docker_compose_file: docker-compose_prod.yaml
+      compose_dir: /docker-apps/demo
+      dotenv_file: environments/prod_env

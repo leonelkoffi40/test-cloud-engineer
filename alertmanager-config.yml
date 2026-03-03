@@ -1,0 +1,16 @@
+#"alertmanager/alertmanager/config.yml" 15L, 313C                                                                                                   15,17        Tout
+global:
+  resolve_timeout: 5m
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'webhook-notifications'
+
+receivers:
+- name: 'webhook-notifications'
+  webhook_configs:
+  - url: https://webhook.site/c0f4bf17-5a1a-486b-86af-2ade9166f704
+    send_resolved: true

@@ -1,0 +1,33 @@
+---
+- name: Deploy Containerized
+  hosts: all
+  gather_facts: no
+  become: false
+  tasks:
+    - name: "Create directory for docker compose file"
+      file:
+        path: "{{ compose_dir }}"
+        state: directory
+    - name: 'Stop current application IF EXIST'
+      shell: |
+        cd {{ compose_dir }}
+        if [ -f compose.yml ] || [ -f compose.yaml] || [ -f docker-compose.yml ] || [ -f docker-compose.yaml ] ; then
+          docker compose down
+        fi
+
+    - name: "Create/Update compose file"
+      copy:
+        src: "{{ docker_compose_file }}"
+        dest: "{{ compose_dir }}/compose.yml"
+
+    - name: "Create/Update .env file"
+      copy:
+        src: "{{ dotenv_file }}"
+        dest: "{{ compose_dir }}/.env"
+
+    - name: 'Update and start application'
+      shell: |
+        cd {{ compose_dir }}
+        docker compose pull
+        docker compose up -d --force-recreate
+

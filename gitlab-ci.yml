@@ -1,0 +1,48 @@
+variables:
+  MAVEN_OPTS: "-Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simplelogger.showDateTime=true -Djava.awt.headless=true"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version --no-transfer-progress -DinstallAtEnd=true -DdeployAtEnd=true"
+cache:
+  paths:
+    - .m2/repository
+    
+stages:
+  - build
+  - test
+  - code_quality
+  - deploy
+services:
+  - name: postgres:12.2-alpine
+    alias: database
+variables:
+  POSTGRES_DB: $POSTGRES_DB
+  POSTGRES_USER: $POSTGRES_USER
+  POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+  POSTGRES_HOST_AUTH_METHOD: trust
+
+job_test:
+  tags:
+    - runner1
+  allow_failure: true
+  stage: test
+  script:
+    - mvn verify
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+  
+job_build:
+  tags:
+    - runner1
+  stage: build
+  script:
+    - sleep 20
+    - echo "mvn clean package"  
+  artifacts:
+    paths:
+      - target
+    expire_in: 1 day
+
+trivy:
+  stage: code_quality

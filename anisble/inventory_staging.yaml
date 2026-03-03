@@ -1,0 +1,10 @@
+all:
+  vars:
+  ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+prod:
+  hosts:
+    staging.host:
+      ansible_host: 192.168.11.3
+      docker_compose_file: docker-compose_staging.yaml
+      compose_dir: /docker-apps/demo
+      dotenv_file: environments/staging_env

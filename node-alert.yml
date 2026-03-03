@@ -1,0 +1,40 @@
+groups:
+  - name: nodes monitoring alerts
+    rules:
+      - alert: HostOutOfMemory
+        expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes < .10)
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: Host out of memory (instance {{ $labels.instance }})
+          description: "Node memory is filling up (< 10% left)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostOutOfDiskSpace
+        expr: (node_filesystem_avail_bytes{fstype!~"^(fuse.*|tmpfs|cifs|nfs)"} / node_filesystem_size_bytes < .10 and on (instance, device, mountpoint) node_filesystem_readonly == 0)
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Host out of disk space (instance {{ $labels.instance }})
+          description: "Disk is almost full (< 10% left)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostOutOfInodes
+        expr: (node_filesystem_files_free / node_filesystem_files < .10 and ON (instance, device, mountpoint) node_filesystem_readonly == 0)
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Host out of inodes (instance {{ $labels.instance }})
+          description: "Disk is almost running out of available inodes (< 10% left)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostFilesystemDeviceError
+        expr: node_filesystem_device_error{fstype!~"^(fuse.*|tmpfs|cifs|nfs)"} == 1
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Host filesystem device error (instance {{ $labels.instance }})
+          description: "Error stat-ing the {{ $labels.mountpoint }} filesystem\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+
