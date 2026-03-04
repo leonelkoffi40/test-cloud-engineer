@@ -60,6 +60,11 @@ https://docs.docker.com/engine/install/ubuntu/. Docker tourne en root est qui es
 
  2. Installation Postgres
  Postgres est installé en utilisant un fichier docker compose pour sa souplesse et la simplicité à diagnosquer en quand de problème. 
+ La base de donne est un élément critique dans une infrastructure et pour cela il faut le sécurisé.
+    * Ce que j'ai fait 
+Pour commencer j'ai créé un réseau docker dédie à la base de donnée. Ce réseau ne sera accessible que pour les conteneurs qui néccessite une connexion à la base de donnée et postgres ne écoute les connexions que sur cette interface. J'ai ensuite authorisé les connexions des hôtes qui ne sont que dans cet réseau et donc pas accessible directement sur internet.
+    * Ce que je pense fait ensuite
+Vue que tout l'infra est sur la même machine j'ai pas configuré la connexion TLS sur la base de donnée, ce qu'il faudra fait ensuite.
 
 NB: Toujours en mettant la sécurité en avant, avant de choisir la version à installer, j'ai documenté sur ça et j'ai verifié dans au moins deux bases de données des vunérabilités connues. Et ça été la même pour toutes les versions choisies.
 
@@ -78,9 +83,10 @@ Il est composé gitlab ci et ansible pour le deploiément. Bien que j'ai fini de
 
 
 Question au choix
+    * suppresion des images docker
 
-j'ai également essaie la suppression des images dans un registre docker mais le resultat actuel est la suppression en laissant un certain nombre les récents. par exemple supprimer les images images en laissant les 10 derniers.
-
+J'ai eu à travailler sur un sujet pareil qui consiste à supprimer les images dans un registre e laissant à un nombre les plus récents; par exemple supprimer les images en laissant les 10 images les récents d'un dépot. Ce travail a été fait avec un script bash mais depuis jenkins pour pouvoir mettre l'approbation de suppression. 
+Et donc j'ai pris ce travail déjà fait que j'éssaie de l'adapter en script purement bash mais je n'ai pas non plus fini et tester.
 
 
 

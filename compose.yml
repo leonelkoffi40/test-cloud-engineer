@@ -1,0 +1,19 @@
+# Ce Docker compose deploie une application spring ici nommé demo 
+# Et aussi actuator configuré dans le projet pour checker la santé de l'application
+
+name: demo
+services:
+  Spring_app:
+    image: demo:0.0.1
+    restart: always
+    env_file: .env
+    ports:
+      - '127.0.0.1:8080:8080'
+    labels:
+      stage: dev
+    healthcheck:
+      test:  "curl --fail --silent localhost:8080/actuator/health | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
