@@ -78,9 +78,7 @@ NB: Pour la réception de notification d'alertmanager j'ai utilisé un wehbook �
 lien du webhook: https://webhook.site/#!/view/c0f4bf17-5a1a-486b-86af-2ade9166f704/da5843d4-ee9b-4e4c-8f9e-294d0f3de986/1 
 
 B. Pipeline cicd
-Il est composé gitlab ci et ansible pour le deploiément. Bien que j'ai fini de configurer l'ansible, je n'ai pas pu terminer avec le gitlab-ci
-
-
+Il est composé gitlab ci et ansible pour le deploiément. Bien que j'ai fini de configurer l'ansible pour le deploiement, je n'ai pas pu terminer avec le gitlab-ci pour l'integration .
 
 Question au choix
     * suppresion des images docker
